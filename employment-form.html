@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employees</title>
+    <style>
+        .employeetable {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .employeetable .employeesList td,
+        .employeetable tr th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .employeetable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .employeetable tr:hover {
+            background-color: #ddd;
+        }
+
+        .employeetable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #568da7;
+            color: white;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <div>
+        Employee Name : <input type="text" placeholder="XXXX" id="employeeName">
+        Gender : <input type="text" placeholder="F / M" id="employeegender">
+        Salary : <input type="text" placeholder="0 JOD" id="employeeSalary">
+        <button onclick="addEmployee()">submit</button>
+    </div>
+    <br>
+    <div>
+        <table class="employeetable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Employee name</th>
+                    <th>Gender</th>
+                    <th>Salary</th>
+                    <th>
+                        <button type="button" onclick="deleteAllEmployees()">
+                            <img src="../example with css/delete.png" style="width: 25px;">
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="employeesList">
+
+            </tbody>
+        </table>
+    </div>
+
+    <a href="javascript:void(0)">click me</a>
+    <script>
+
+        var employees = [];
+        var tbody = document.getElementById("employeesList");
+
+        function buildTable() {
+
+            tbody.innerHTML = null;
+
+            for (i = 0; i < employees.length; i++) {
+                let tr = document.createElement('tr');
+                let tdId = document.createElement('td');
+                let tdname = document.createElement('td');
+                let tdgender = document.createElement('td');
+                let tdsalary = document.createElement('td');
+                let tddelete = document.createElement("td");
+                let btndel = document.createElement("button");
+
+                let image = document.createElement('img');
+                image.setAttribute('src', '../example with css/delete.png');
+                image.setAttribute('width', '25px');
+
+                btndel.setAttribute('onclick', `deleteById(${i})`);
+                btndel.append(image);
+                tddelete.append(btndel);
+
+                tdId.innerText = employees[i].id;
+                tdname.innerText = employees[i].name;
+                tdgender.innerText = employees[i].gender;
+                tdsalary.innerText = employees[i].salary;
+
+                tr.append(tdId, tdname, tdgender, tdsalary, tddelete);
+                
+                
+                tbody.append(tr);
+
+            }
+        }
+
+
+        buildTable();
+
+        function addEmployee() {
+
+            var inputnameemp = document.getElementById("employeeName").value;
+            var inputgender = document.getElementById("employeegender").value;
+            var inputsalary = document.getElementById("employeeSalary").value;
+
+            var empIds = employees.map(emp => emp.id);
+
+            var employeeobj = {
+                id: empIds.length == 0 ? 1 : Math.max(...empIds) + 1,
+                name: inputnameemp,
+                gender: inputgender,
+                salary: inputsalary,
+            }
+
+            if (inputnameemp.length < 1 || inputsalary.length < 1) {
+                alert('invalid value');
+                return;
+            }
+
+            employees.push(employeeobj);
+
+            document.getElementById("employeeName").value = '';
+            document.getElementById("employeegender").value = '';
+            document.getElementById("employeeSalary").value = '';
+
+            buildTable();
+        }
+
+        function deleteAllEmployees() {
+            if (employees.length >= 1) {
+                employees = [];
+                buildTable();
+            }
+            else {
+                alert('cannot delete empty data');
+            }
+        }
+
+        function deleteById(index) {
+            debugger;
+            employees.splice(index, 1);
+
+            // const index = employees.findIndex((x) => x.id === employeeId);
+            // if (index >= 0) {
+            //     employees.splice(index, 1);
+            //     buildTable();
+            // }
+
+
+        }
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>
